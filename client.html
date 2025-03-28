@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WebSocket Chat Client</title>
+</head>
+<body>
+  <h1>Chat Client</h1>
+  <div id="messages"></div>
+  <form id="chatForm">
+    <input type="text" id="messageInput" placeholder="Enter message" required>
+    <button type="submit">Send</button>
+  </form>
+
+  <script>
+    // Connexion WebSocket
+    const ws = new WebSocket('ws://localhost:8080');
+
+    ws.onopen = () => {
+      console.log('WebSocket connection established');
+    };
+
+    ws.onmessage = (event) => {
+      const message = JSON.parse(event.data);
+      console.log('Message received:', message);
+      const messageElement = document.createElement('p');
+      messageElement.textContent = `${message.chat_message.sender_id}: ${message.chat_message.content}`;
+      document.getElementById('messages').appendChild(messageElement);
+    };
+
+    ws.onerror = (error) => {
+      console.error('WebSocket error:', error);
+    };
+
+    // Envoi d'un message
+    document.getElementById('chatForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const messageInput = document.getElementById('messageInput');
+      const message = {
+        chat_message: {
+          id: `msg_${new Date().getTime()}`,
+          room_id: 'room1',
+          sender_id: 'client1',
+          content: messageInput.value
+        }
+      };
+      ws.send(JSON.stringify(message));
+      messageInput.value = ''; // Réinitialiser le champ
+    });
+  </script>
+</body>
+</html>
