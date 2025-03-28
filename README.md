@@ -15,7 +15,6 @@ Ce projet implémente un proxy inverse permettant aux clients WebSocket de commu
 - [Utilisation](#utilisation)
 - [Gestion des Erreurs](#gestion-des-erreurs)
 - [Dépannage](#dépannage)
-- [Licence](#licence)
 
 ## Introduction
 
